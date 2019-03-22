@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Npgsql;
 
-namespace LojaTeste.Properties
+namespace LojaTeste.Modelos
 {
     public class Pedido
     {
@@ -33,16 +34,31 @@ namespace LojaTeste.Properties
         public void ListarProdutosComprados()
         {
 
-            int id = 0;
+            //int id = 0;
 
-            foreach (var produto in ProdutosComprados)
+            //foreach (var produto in ProdutosComprados)
+            //{
+            //    Console.Write(id);
+            //    Console.WriteLine(produto);
+            //    id++;
+            //    Console.WriteLine("-----------------------------------------------------");
+            //}
+            //id = 0;
+            Banco banco = new Banco();
+
+            banco.sql = "SELECT clie_id,clie_nome,clie_cpf,clie_endereco,clie_telefone\nFROM cliente\nORDER BY clie_nome ASC";
+
+            var ds = banco.ExecutarReader();
+
+            while (ds.Read())
             {
-                Console.Write(id);
-                Console.WriteLine(produto);
-                id++;
-                Console.WriteLine("-----------------------------------------------------");
+                for (int i = 0; i < ds.FieldCount; i++)
+                {
+                    Console.Write("{0}\t", ds[i]);
+                }
+                Console.WriteLine("");
             }
-            id = 0;
+
         }
 
         public override string ToString()

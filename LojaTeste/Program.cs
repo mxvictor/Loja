@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Npgsql;
+using LojaTeste.Modelos;
 
-namespace LojaTeste.Properties
+namespace LojaTeste
 {
     class Program
     {
+
+
         static void Main(string[] args)
         {
+
             MenuLoja();
             int op = int.Parse(Console.ReadLine());
-            Loja.PupularLoja();
+            //Loja.PupularLoja();
             Cliente Cliente = new Cliente();
 
 
@@ -65,7 +70,8 @@ namespace LojaTeste.Properties
                                 break;
 
                             case 4:
-                                Loja.Clientes[index].ListarPedidos();
+                                //Loja.Clientes[index].ListarPedidos();
+                                Cliente.ListarPedidos(index);
                                 Console.WriteLine("APERTE 5 PARA VOLTAR:");
                                 op4 = int.Parse(Console.ReadLine());
                                 break;

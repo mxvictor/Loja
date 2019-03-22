@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Npgsql;
 
-namespace LojaTeste.Properties
+namespace LojaTeste.Modelos
 {
     public class Loja
     {
@@ -12,91 +13,22 @@ namespace LojaTeste.Properties
         public static List<Cliente> Clientes { get; set; }
         public static List<Produto> Produtos { get; set; }
 
-        public static void PupularLoja()
-        {
-            Produtos = new List<Produto>
-            {
-                new Produto()
-                {
-                    Nome = "Colar",
-                    ID = "7979764",
-                    Preço = 9.99,
-                    Quantidade = 15
-
-                },
-                 new Produto()
-                 {
-                    Nome = "Pulseira",
-                    ID = "4941613",
-                    Preço = 5.88,
-                    Quantidade = 25
-
-                 },
-                  new Produto()
-                  {
-                    Nome = "Missanga",
-                    ID = "2825151",
-                    Preço = 9.50,
-                    Quantidade = 50
-
-                  },
-            };
-            //Pedidos = new List<Pedido>
-            //{
-            //    new Pedido()
-            //    {
-            //        Numero = 1111,
-            //        Data = "20/02/2019",
-
-
-            //    },
-            //     new Pedido()
-            //     {
-            //        Numero = 2222,
-            //        Data = "20/02/2018",
-
-            //     },
-            //      new Pedido()
-            //      {
-            //        Numero = 3333,
-            //        Data = "20/03/2019",
-
-            //      },
-            //};
-
-            Clientes = new List<Cliente> {
-                new Cliente()
-                {
-                    Nome = "victor",
-                    CPF = "7979764",
-                    Endereço = "rua 123",
-                    Telefone = "7979764"
-
-                },
-                 new Cliente()
-                 {
-                     Nome = "rone",
-                     CPF = "7979764",
-                     Endereço = "rua 789",
-                     Telefone = "7979764"
-
-                 },
-                  new Cliente()
-                  {
-                      Nome = "vinicius",
-                      CPF = "7979764",
-                      Endereço = "rua 453",
-                      Telefone = "7979764"
-
-                  },
-            };
-        }
 
         #region Cliente
 
         public static void CadastrarCliente(Cliente C)
         {
-            Clientes.Add(C);
+            Banco banco = new Banco();
+
+            banco.sql = $@"INSERT INTO public.cliente (clie_nome, clie_cpf, clie_endereco, clie_telefone) 
+                            VALUES (@nome, @cpf, @endereco, @telefone)";
+
+            banco.addParametros("nome", C.Nome);
+            banco.addParametros("cpf", C.CPF);
+            banco.addParametros("endereco", C.Endereço);
+            banco.addParametros("telefone", C.Telefone);
+
+            banco.ExecutarReader();
         }
 
         public static void EditarCliente(Cliente C, int id)
@@ -108,20 +40,22 @@ namespace LojaTeste.Properties
 
         public static void ListarClientes()
         {
-            int id = 0;
-            Console.Clear();
-            Console.WriteLine("LISTA CLIENTES");
-            Console.WriteLine("------------------------------------------------------------------------------------------");
-            Console.WriteLine("ID       |     NOME        |       CPF        |       ENDERECO      |       TELEFONE     |");
-            Console.WriteLine("------------------------------------------------------------------------------------------");
-            foreach (var cliente in Clientes)
+            Banco banco = new Banco();
+
+            banco.sql = $@"SELECT clie_id,clie_nome,clie_cpf,clie_endereco,clie_telefone
+                            FROM cliente
+                            ORDER BY clie_nome ASC";
+
+            var ds = banco.ExecutarReader();
+
+            while (ds.Read())
             {
-                Console.Write(id);
-                Console.WriteLine(cliente);
-                id++;
-                Console.WriteLine("--------------------------------------------------------------------------------------");
+                for(int i = 0; i < ds.FieldCount; i++)
+                {
+                    Console.Write("{0}\t",ds[i]);
+                }
+                Console.WriteLine("");
             }
-            id = 0;
         }
 
         public static void ExcluirClientes(int id)
@@ -153,20 +87,22 @@ namespace LojaTeste.Properties
 
         public static void ListarProdutos()
         {
-            int id = 0;
-            Console.Clear();
-            Console.WriteLine("LISTA PRODUTOS");
-            Console.WriteLine("----------------------------------------------------------------------------");
-            Console.WriteLine("NUMERO     |     ID    |     NOME   |    PREÇO   |   QUANTIDADE   ");
-            Console.WriteLine("----------------------------------------------------------------------------");
-            foreach (var produto in Produtos)
+            Banco banco = new Banco();
+
+            banco.sql = $@"SELECT  prod_id,prod_nome,prod_preco,prod_quantidade
+                            FROM produto
+                            ORDER BY prod_nome ASC";
+
+            var ds = banco.ExecutarReader();
+
+            while (ds.Read())
             {
-                Console.Write(id);
-                Console.WriteLine(produto);
-                id++;
-                Console.WriteLine("------------------------------------------------------------------------");
+                for (int i = 0; i < ds.FieldCount; i++)
+                {
+                    Console.Write("{0}\t", ds[i]);
+                }
+                Console.WriteLine("");
             }
-            id = 0;
         }
 
         public static void ExcluirProdutos(int id)

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LojaTeste.Properties
+namespace LojaTeste.Modelos
 {
     public class Produto
     {
