@@ -33,8 +33,20 @@ namespace LojaTeste.Modelos
 
         public static void EditarCliente(Cliente C, int id)
         {
-            Clientes.Insert(id, C);
-            Clientes.RemoveAt(id + 1);
+            Banco banco = new Banco();
+
+            banco.sql = $@"UPDATE cliente
+                           SET clie_nome = @nome,
+                               clie_telefone = @telefone  ,
+                               clie_endereco = @endereco
+                           WHERE
+                               clie_id = @id;";
+            banco.addParametros("id", id);
+            banco.addParametros("nome", C.Nome);
+            banco.addParametros("telefone", C.Telefone);
+            banco.addParametros("endereco", C.Endereço);
+            banco.ExecutarReader();
+
 
         }
 
@@ -60,14 +72,47 @@ namespace LojaTeste.Modelos
 
         public static void ExcluirClientes(int id)
         {
-            Clientes.RemoveAt(id);
+            Banco banco = new Banco();
+
+            banco.sql = $@"DELETE FROM public.cliente 
+                           WHERE clie_id = @id";
+
+            banco.addParametros("id", id);
+            banco.ExecutarReader();
         }
 
         #endregion
 
         #region Pedidos
 
+        public static int CadastrarPedido(int id)
+        {
+            Banco banco = new Banco();
 
+            banco.sql = $@"INSERT INTO public.pedido (pedi_clie_id) 
+                            VALUES (@id )returning pedi_numero";
+
+            banco.addParametros("id", id);
+
+            var num_pedi = banco.ExecutarReader();
+            num_pedi.Read();
+            return Convert.ToInt32(num_pedi[0]);
+        }
+
+        public static void ProdutosPedido(int id, int qnt, int pedi_id)
+        {
+            Banco banco = new Banco();
+
+            banco.sql = $@"INSERT INTO public.pedido_item (pedi_item_prod_id,pedi_pedi_item_numero,pedi_quantidade) 
+                            VALUES (@id,@numero,@quantidade)";
+
+            banco.addParametros("id", id);
+            banco.addParametros("numero", pedi_id);
+            banco.addParametros("quantidade", qnt);
+
+
+            banco.ExecutarReader();
+        }
 
         #endregion
 
@@ -75,13 +120,37 @@ namespace LojaTeste.Modelos
 
         public static void CadastrarProduto(Produto D)
         {
-            Produtos.Add(D);
+            Banco banco = new Banco();
+
+            banco.sql = $@"INSERT INTO public.produto (prod_nome, prod_preco, prod_quantidade) 
+                            VALUES (@nome, @preco, @quantidade)";
+            
+            banco.addParametros("nome",D.Nome);
+            banco.addParametros("preco", D.Preco);
+            banco.addParametros("quantidade", D.Quantidade);
+
+            banco.ExecutarReader();
         }
 
         public static void EditarProduto(Produto D, int id)
         {
-            Produtos.Insert(id, D);
-            Produtos.RemoveAt(id + 1);
+            //Produtos.Insert(id, D);
+            //Produtos.RemoveAt(id + 1);
+            Banco banco = new Banco();
+
+            banco.sql = $@"UPDATE produto
+                           SET prod_nome = @nome,
+                               prod_preco = @preco  ,
+                               prod_quantidade = @quantidade
+                           WHERE
+                               prod_id = @id;";
+
+            banco.addParametros("id", id);
+            banco.addParametros("nome", D.Nome);
+            banco.addParametros("preco", D.Preco);
+            banco.addParametros("quantidade", D.Quantidade);
+            banco.ExecutarReader();
+
 
         }
 
@@ -107,7 +176,13 @@ namespace LojaTeste.Modelos
 
         public static void ExcluirProdutos(int id)
         {
-            Produtos.RemoveAt(id);
+            Banco banco = new Banco();
+
+            banco.sql = $@"DELETE FROM public.produto 
+                           WHERE prod_id = @id";
+
+            banco.addParametros("id", id);
+            banco.ExecutarReader();
         }
 
         #endregion

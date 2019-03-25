@@ -8,16 +8,15 @@ namespace LojaTeste.Modelos
 {
     public class Produto
     {
-        public string ID { get; set; }
+        //public string ID { get; set; }
         public string Nome { get; set; }
-        public double Preço { get; set; }
+        public double Preco { get; set; }
         public int Quantidade { get; set; }
 
-        public Produto(string iD, string nome, double preço, int quantidade)
+        public Produto(string nome, double preço, int quantidade)
         {
-            ID = iD;
             Nome = nome;
-            Preço = preço;
+            Preco = preço;
             Quantidade = quantidade;
         }
 
@@ -26,9 +25,9 @@ namespace LojaTeste.Modelos
 
         }
 
-        public override string ToString()
-        {
-            return "           |  " + ID + "  |   " + Nome + "     |    " + Preço + "     |    " + Quantidade + "     |    ";
-        }
+        //public override string ToString()
+        //{
+        //    return "           |  " + ID + "  |   " + Nome + "     |    " + Preço + "     |    " + Quantidade + "     |    ";
+        //}
     }
 }

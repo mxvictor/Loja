@@ -17,7 +17,6 @@ namespace LojaTeste
 
             MenuLoja();
             int op = int.Parse(Console.ReadLine());
-            //Loja.PupularLoja();
             Cliente Cliente = new Cliente();
 
 
@@ -50,7 +49,7 @@ namespace LojaTeste
                         switch (op4)
                         {
                             case 1:
-                                C = MenuCadastrarCliente();
+                                C = MenuEditarCliente();
                                 Loja.EditarCliente(C, index);
                                 op4 = 1;
                                 break;
@@ -62,15 +61,37 @@ namespace LojaTeste
 
                             case 3:
                                 Loja.ListarProdutos();
-                                Console.WriteLine("SELECIONE O NUMERO DO PRODUTO COMPRADO: ");
-                                string num = Console.ReadLine();
-                                Loja.Clientes[index].Compra(num);
+                                Console.WriteLine("SELECIONE O NUMERO DO PRODUTO COMPRADO OU APERTE 0 PARA FINALIZAR: ");
+                                int num = int.Parse(Console.ReadLine());
+                                Console.WriteLine("SELECIONE A QUANTIDADE QUE DESEJA COMPRAR: ");
+                                int qnt = int.Parse(Console.ReadLine());
+                                var pedi_id = Loja.CadastrarPedido(index);
+           
+                                if (num == 0)
+                                {
+                                    op4 = 0;
+                                }
+                                else
+                                {
+                                    Loja.ProdutosPedido(num, qnt,pedi_id);
+                                    while(num != 0)
+                                    {
+                                        Console.WriteLine("SELECIONE O NUMERO DO PRODUTO COMPRADO OU APERTE 0 PARA FINALIZAR: ");
+                                        num = int.Parse(Console.ReadLine());
+                                        if(num != 0)
+                                        {
+                                            Console.WriteLine("SELECIONE A QUANTIDADE QUE DESEJA COMPRAR: ");
+                                            qnt = int.Parse(Console.ReadLine());
+                                            Loja.ProdutosPedido(num, qnt,pedi_id);
+                                        }
+
+                                    }
+                                }
 
 
                                 break;
 
                             case 4:
-                                //Loja.Clientes[index].ListarPedidos();
                                 Cliente.ListarPedidos(index);
                                 Console.WriteLine("APERTE 5 PARA VOLTAR:");
                                 op4 = int.Parse(Console.ReadLine());
@@ -95,7 +116,7 @@ namespace LojaTeste
                         switch (op2)
                         {
                             case 1:
-                                D = MenuCadastrarProduto();
+                                D = MenuEditarProduto();
                                 Loja.EditarProduto(D, index);
                                 op4 = 1;
                                 break;
@@ -138,8 +159,7 @@ namespace LojaTeste
             Console.WriteLine("ALTERAÇÃO CLIENTE");
             Console.Write("Nome: ");
             string Nome = Console.ReadLine();
-            Console.Write("CPF: ");
-            string CPF = Console.ReadLine();
+            string CPF = "12312313";
             Console.Write("Endereço: ");
             string Endereço = Console.ReadLine();
             Console.Write("Telefone: ");
@@ -206,30 +226,26 @@ namespace LojaTeste
         {
             Console.Clear();
             Console.WriteLine("CADASTRO");
-            Console.Write("ID: ");
-            string Id = Console.ReadLine();
             Console.Write("NOME: ");
             string Nome = Console.ReadLine();
             Console.Write("PREÇO: ");
-            double Preço = double.Parse(Console.ReadLine());
+            double Preco = double.Parse(Console.ReadLine());
             Console.Write("QUANTIDADE: ");
             int Quantidade = int.Parse(Console.ReadLine());
-            return new Produto(Id, Nome, Preço, Quantidade);
+            return new Produto(Nome, Preco, Quantidade);
         }
 
         public static Produto MenuEditarProduto()
         {
             Console.Clear();
             Console.WriteLine("ALTERAÇÃO PRODUTO");
-            Console.Write("ID: ");
-            string Id = Console.ReadLine();
             Console.Write("NOME: ");
             string Nome = Console.ReadLine();
             Console.Write("PREÇO: ");
-            double Preço = double.Parse(Console.ReadLine());
+            double Preco = double.Parse(Console.ReadLine());
             Console.Write("QUANTIDADE: ");
             int Quantidade = int.Parse(Console.ReadLine());
-            return new Produto(Id, Nome, Preço, Quantidade);
+            return new Produto(Nome, Preco, Quantidade);
 
         }
     }

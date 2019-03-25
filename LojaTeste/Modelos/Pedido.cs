@@ -33,17 +33,6 @@ namespace LojaTeste.Modelos
 
         public void ListarProdutosComprados()
         {
-
-            //int id = 0;
-
-            //foreach (var produto in ProdutosComprados)
-            //{
-            //    Console.Write(id);
-            //    Console.WriteLine(produto);
-            //    id++;
-            //    Console.WriteLine("-----------------------------------------------------");
-            //}
-            //id = 0;
             Banco banco = new Banco();
 
             banco.sql = "SELECT clie_id,clie_nome,clie_cpf,clie_endereco,clie_telefone\nFROM cliente\nORDER BY clie_nome ASC";
@@ -61,10 +50,10 @@ namespace LojaTeste.Modelos
 
         }
 
-        public override string ToString()
-        {
-            return "           |  " + Numero + "  |   " + Data + "     |    ";// + . + "     |    " + Quantidade + "     |    ";
-        }
+        //public override string ToString()
+        //{
+        //    return "           |  " + Numero + "  |   " + Data + "     |    ";// + . + "     |    " + Quantidade + "     |    ";
+        //}
 
     }
 }

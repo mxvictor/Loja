@@ -32,14 +32,27 @@ namespace LojaTeste.Modelos
 
         public void Compra(string prods)
         {
+            Banco banco = new Banco();
             var arr = prods.Split(',');
             var pedido = new Pedido();
             foreach (var item in arr)
             {
                 pedido.AdicionarProduto(int.Parse(item));
+                banco.sql = $@"INSERT INTO public.pedido_item (pedi_item_prod_id, pedi_pedi_item_numero, pedi_quantidade) 
+                            VALUES (@id, @numero, @quantidade)";
+                banco.addParametros("id", item);
+               // banco.addParametros("numero", D.Preco);
+              // banco.addParametros("quantidade", D.Quantidade);
+
+                banco.ExecutarReader();
             }
 
             Pedidos.Add(pedido);
+
+
+
+
+           
         }
 
         public void ListarPedidos(int clientID)
@@ -70,10 +83,10 @@ namespace LojaTeste.Modelos
         }
 
 
-        public override string ToString()
-        {
-            return "  |       " + Nome + "     |    " + CPF + "     |    " + Endereço + "     |    " + Telefone;
-        }
+        //public override string ToString()
+        //{
+        //    return "  |       " + Nome + "     |    " + CPF + "     |    " + Endereço + "     |    " + Telefone;
+        //}
 
     }
 }
